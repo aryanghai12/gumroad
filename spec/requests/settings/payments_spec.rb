@@ -185,6 +185,32 @@ describe("Payments Settings Scenario", type: :system, js: true) do
       expect(@user.stripe_account).to be_present
     end
 
+    it "does not allow saving placeholder state values" do
+      visit settings_payments_path
+
+      fill_in("First name", with: "barnabas")
+      fill_in("Last name", with: "barnabastein")
+      fill_in("Address", with: "address_full_match")
+      fill_in("City", with: "barnabasville")
+      fill_in("ZIP code", with: "12345")
+      fill_in("Phone number", with: "(502) 254-1982")
+
+      fill_in("Pay to the order of", with: "barnabas ngagy")
+      fill_in("Routing number", with: "110000000")
+      fill_in("Account number", with: "000123456789")
+      fill_in("Confirm account number", with: "000123456789")
+
+      select("1", from: "Day")
+      select("January", from: "Month")
+      select("1980", from: "Year")
+      fill_in("Last 4 digits of SSN", with: "1235")
+
+      click_on("Update settings")
+
+      expect(page).not_to have_alert(text: "Thanks! You're all set.")
+      expect(find_field("State")["aria-invalid"]).to eq "true"
+    end
+
     it "allows the creator to switch to debit card as payout method" do
       visit settings_payments_path
 
@@ -1309,6 +1335,46 @@ describe("Payments Settings Scenario", type: :system, js: true) do
         expect(@user.reload.active_bank_account.routing_number).to eq("11000-000")
         expect(@user.active_bank_account.send(:account_number_decrypted)).to eq("000123456789")
         expect(@user.stripe_account.charge_processor_merchant_id).to be_present
+      end
+
+      it "does not allow saving placeholder state values for business" do
+        visit settings_payments_path
+
+        choose "Business"
+
+        fill_in("Legal business name", with: "CA LLC")
+        find_field("Address", match: :first).set("address_full_match")
+        find_field("City", match: :first).set("Toronto")
+        all('select[id$="business-province"]').last.select("Ontario")
+        find_field("Postal code", match: :first).set("M4C 1T2")
+        fill_in("Business phone number", with: "5052426789")
+        fill_in("Business Number (BN)", with: "000000000")
+
+        fill_in("First name", with: "Canadian")
+        fill_in("Last name", with: "Manager")
+        fill_in("Job title", with: "Sales Manager")
+        all('select[id$="creator-country"]').last.select("Canada")
+        all('input[id$="creator-street-address"]').last.set("address_full_match")
+        all('input[id$="creator-city"]').last.set("Toronto")
+        all('select[id$="creator-province"]').last.select("Ontario")
+        all('input[id$="creator-zip-code"]').last.set("M4C 1T2")
+        fill_in("Phone number", with: "5052426789")
+        fill_in("Social Insurance Number", with: "000000000")
+
+        select("1", from: "Day")
+        select("January", from: "Month")
+        select("1980", from: "Year")
+
+        fill_in("Pay to the order of", with: "CA LLC")
+        fill_in("Transit #", with: "110000")
+        fill_in("Institution #", with: "000")
+        fill_in("Account #", with: "000123456789")
+        fill_in("Confirm account #", with: "000123456789")
+
+        click_on("Update settings")
+
+        expect(page).not_to have_alert(text: "Thanks! You're all set.")
+        expect(find_field("Type")["aria-invalid"]).to eq "true"
       end
     end
 
