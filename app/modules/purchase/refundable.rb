@@ -291,6 +291,11 @@ class Purchase
         refund.business_vat_id = business_vat_id
         refund.processor_refund_id = charge_refund.id
         refunds << refund
+
+        if business_vat_id.present?
+          validate_and_store_vat_id!(business_vat_id)
+        end
+
         save!
         Credit.create_for_vat_refund!(refund:) if paypal_order_id.present? || merchant_account&.is_a_stripe_connect_account?
       end

@@ -3,9 +3,9 @@
 require_relative "../../../lib/utilities/geo_ip"
 
 class SalesTaxCalculator
-  attr_accessor :tax_rate, :product, :price_cents, :shipping_cents, :quantity, :buyer_location, :buyer_vat_id, :state, :is_us_taxable_state, :is_ca_taxable, :is_quebec
+  attr_accessor :tax_rate, :product, :price_cents, :shipping_cents, :quantity, :buyer_location, :buyer_vat_id, :previously_validated, :state, :is_us_taxable_state, :is_ca_taxable, :is_quebec
 
-  def initialize(product:, price_cents:, shipping_cents: 0, quantity: 1, buyer_location:, buyer_vat_id: nil, from_discover: false)
+  def initialize(product:, price_cents:, shipping_cents: 0, quantity: 1, buyer_location:, buyer_vat_id: nil, previously_validated: false, from_discover: false)
     @tax_rate = nil
     @product = product
     @price_cents = price_cents
@@ -13,6 +13,7 @@ class SalesTaxCalculator
     @quantity = quantity
     @buyer_location = buyer_location
     @buyer_vat_id = buyer_vat_id
+    @previously_validated = previously_validated
     validate
     @state = if buyer_location[:country] == Compliance::Countries::USA.alpha2
       UsZipCodes.identify_state_code(buyer_location[:postal_code])
@@ -120,6 +121,10 @@ class SalesTaxCalculator
     end
 
     def is_vat_id_valid?
+      return false if @buyer_vat_id.blank?
+
+      return true if @previously_validated
+
       if buyer_location && Compliance::Countries::AUS.alpha2 == buyer_location[:country]
         AbnValidationService.new(@buyer_vat_id).process
       elsif buyer_location && Compliance::Countries::SGP.alpha2 == buyer_location[:country]

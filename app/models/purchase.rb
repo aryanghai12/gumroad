@@ -3138,6 +3138,47 @@ class Purchase < ApplicationRecord
       self.purchase_sales_tax_info.save!
     end
 
+    def validate_and_store_vat_id!(vat_id)
+      return false if vat_id.blank?
+      return false unless purchase_sales_tax_info.present?
+
+      country_code = purchase_sales_tax_info.country_code
+      state_code = purchase_sales_tax_info.state_code
+
+      is_valid = if Compliance::Countries::AUS.alpha2 == country_code
+        AbnValidationService.new(vat_id).process
+      elsif Compliance::Countries::SGP.alpha2 == country_code
+        GstValidationService.new(vat_id).process
+      elsif Compliance::Countries::CAN.alpha2 == country_code && QUEBEC == state_code
+        QstValidationService.new(vat_id).process
+      elsif Compliance::Countries::NOR.alpha2 == country_code
+        MvaValidationService.new(vat_id).process
+      elsif Compliance::Countries::BHR.alpha2 == country_code
+        TrnValidationService.new(vat_id).process
+      elsif Compliance::Countries::KEN.alpha2 == country_code
+        KraPinValidationService.new(vat_id).process
+      elsif Compliance::Countries::OMN.alpha2 == country_code
+        OmanVatNumberValidationService.new(vat_id).process
+      elsif Compliance::Countries::NGA.alpha2 == country_code
+        FirsTinValidationService.new(vat_id).process
+      elsif Compliance::Countries::TZA.alpha2 == country_code
+        TraTinValidationService.new(vat_id).process
+      elsif Compliance::Countries::COUNTRIES_THAT_COLLECT_TAX_ON_ALL_PRODUCTS.include?(country_code) ||
+            Compliance::Countries::COUNTRIES_THAT_COLLECT_TAX_ON_DIGITAL_PRODUCTS_WITH_TAX_ID_PRO_VALIDATION.include?(country_code)
+        TaxIdValidationService.new(vat_id, country_code).process
+      else
+        VatValidationService.new(vat_id).process
+      end
+
+      if is_valid
+        purchase_sales_tax_info.business_vat_id = vat_id
+        purchase_sales_tax_info.save!
+        true
+      else
+        false
+      end
+    end
+
     def charge_discover_fee?
       return false unless link.recommendable? || (not_is_original_subscription_purchase? && original_purchase&.was_discover_fee_charged?)
       was_product_recommended? && !RecommendationType.is_free_recommendation_type?(recommended_by)
@@ -3258,12 +3299,21 @@ class Purchase < ApplicationRecord
       # See best_guess_zip for more detail on parsing / guessing zip
       postal_code = best_guess_zip
 
+      previously_validated_vat_id = false
+      if subscription.present? && business_vat_id.present?
+        original = subscription.original_purchase
+        if original&.purchase_sales_tax_info&.business_vat_id == business_vat_id
+          previously_validated_vat_id = true
+        end
+      end
+
       calculator = SalesTaxCalculator.new(product: link,
                                           price_cents:,
                                           shipping_cents: shipping_cents.to_i,
                                           quantity:,
                                           buyer_location: { postal_code:, country: country_code, state:, ip_address: },
                                           buyer_vat_id: business_vat_id,
+                                          previously_validated: previously_validated_vat_id,
                                           from_discover: was_product_recommended)
 
       return unless in_eu_country || in_australia || in_singapore || in_norway || (in_other_taxable_country && Feature.active?("collect_tax_#{country_code.downcase}")) || calculator.is_us_taxable_state || calculator.is_ca_taxable
