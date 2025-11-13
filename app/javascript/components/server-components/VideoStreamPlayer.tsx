@@ -12,6 +12,7 @@ import { TranscodingNoticeModal } from "$app/components/Download/TranscodingNoti
 import { useRunOnce } from "$app/components/useRunOnce";
 
 const LOCATION_TRACK_EVENT_DELAY_MS = 10_000;
+const VISUAL_QUALITY_DEBOUNCE_MS = 500; // Prevent rapid repeated seeks
 
 type SubtitleFile = {
   file: string;
@@ -56,7 +57,8 @@ export const VideoStreamPlayer = ({
       containerRef.current.id = playerId;
 
       let lastPlayedId: number | undefined;
-      let isInitialSeekDone = false;
+      const initialSeekDoneByIndex = new Map<number, boolean>();
+      let lastVisualQualityTimestamp = 0;
       const playlist = initialPlaylist;
 
       const player = await createJWPlayer(playerId, {
@@ -71,9 +73,24 @@ export const VideoStreamPlayer = ({
         })),
       });
 
+      const safeSeek = (targetPosition: number) => {
+        try {
+          const duration = player.getDuration();
+          if (!duration || duration <= 0) {
+            return;
+          }
+
+          const clampedPosition = Math.max(0, Math.min(targetPosition, duration - 0.25));
+
+          player.seek(clampedPosition);
+        } catch (_error) {}
+      };
+
       const updateLocalMediaLocation = (position: number, duration: number) => {
-        const videoFile = playlist[player.getPlaylistIndex()];
-        if (videoFile && isInitialSeekDone && lastPlayedId === player.getPlaylistIndex()) {
+        const playlistIndex = player.getPlaylistIndex();
+        const videoFile = playlist[playlistIndex];
+
+        if (videoFile && initialSeekDoneByIndex.get(playlistIndex) && lastPlayedId === playlistIndex) {
           const location = position === duration ? 0 : position;
           if (videoFile.latest_media_location == null) videoFile.latest_media_location = { location };
           else videoFile.latest_media_location.location = location;
@@ -131,21 +148,36 @@ export const VideoStreamPlayer = ({
             purchaseId: purchase_id,
           });
           lastPlayedId = itemId;
-          isInitialSeekDone = false;
+          initialSeekDoneByIndex.set(itemId, false);
         }
       });
 
       player.on("visualQuality", () => {
-        if (isInitialSeekDone && lastPlayedId === player.getPlaylistIndex()) return;
-        const videoFile = playlist[player.getPlaylistIndex()];
-        if (
-          videoFile?.latest_media_location != null &&
-          videoFile.latest_media_location.location !== videoFile.content_length
-        ) {
-          player.seek(videoFile.latest_media_location.location);
+        const now = Date.now();
+        const timeSinceLastCall = now - lastVisualQualityTimestamp;
+
+        if (timeSinceLastCall < VISUAL_QUALITY_DEBOUNCE_MS) {
+          return;
         }
-        isInitialSeekDone = true;
+
+        lastVisualQualityTimestamp = now;
+        const playlistIndex = player.getPlaylistIndex();
+
+        if (initialSeekDoneByIndex.get(playlistIndex)) {
+          return;
+        }
+
+        const videoFile = playlist[playlistIndex];
+        const savedLocation = videoFile?.latest_media_location?.location;
+
+        if (videoFile && savedLocation != null && savedLocation !== videoFile.content_length && savedLocation > 0) {
+          safeSeek(savedLocation);
+        }
+
+        initialSeekDoneByIndex.set(playlistIndex, true);
       });
+
+      player.on("error", () => {});
     };
 
     void createPlayer();
