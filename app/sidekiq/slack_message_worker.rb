@@ -5,7 +5,6 @@ class SlackMessageWorker
   sidekiq_options retry: 9, queue: :default
 
   SLACK_MESSAGE_SEND_TIMEOUT = 5.seconds
-  SLACK_WEBHOOK_URL = GlobalConfig.get("SLACK_WEBHOOK_URL")
 
   ##
   # Creates a Slack message in a given channel
@@ -24,29 +23,59 @@ class SlackMessageWorker
   # to format the hash for an attachment: https://api.slack.com/docs/attachments
   def perform(room_name, sender, message_text, color = "gray", options = {})
     room_name = "test" unless Rails.env.production?
-    chat_room = CHAT_ROOMS[room_name.to_sym][:slack]
-    return if chat_room.nil?
 
-    hex_color = Color::CSS[color].html
+    send_email_notification(room_name, sender, message_text, color, options)
 
-    Timeout.timeout(SLACK_MESSAGE_SEND_TIMEOUT) do
-      client = Slack::Notifier.new SLACK_WEBHOOK_URL do
-        defaults channel: "##{chat_room[:channel]}",
-                 username: sender
-      end
-
-      extra_attachments = (options["attachments"].nil? ? [] : options["attachments"])
-      client.ping("", attachments: [{
-        fallback: message_text,
-        color: hex_color,
-        text: message_text
-      }] + extra_attachments)
-    end
-  rescue StandardError, Timeout::Error => e
-    unless e.message.include? "rate_limited"
-      raise SlackError, e.message
+    if Feature.active?(:send_slack_notifications)
+      send_slack_notification(room_name, sender, message_text, color, options)
     end
   end
+
+  private
+    def send_email_notification(room_name, sender, message_text, color, options)
+      NotificationMailer.notification_email(
+        room_name,
+        sender,
+        message_text,
+        color,
+        options
+      ).deliver_later
+    rescue StandardError => e
+      Rails.logger.error("Failed to send notification email: #{e.message}")
+      Bugsnag.notify(e, {
+                       room_name: room_name,
+                       sender: sender,
+                       message_preview: message_text&.first(100)
+                     })
+    end
+
+    def send_slack_notification(room_name, sender, message_text, color, options)
+      chat_room = CHAT_ROOMS[room_name.to_sym][:slack]
+      return if chat_room.nil?
+
+      slack_webhook_url = GlobalConfig.get("SLACK_WEBHOOK_URL")
+      return if slack_webhook_url.blank?
+
+      hex_color = Color::CSS[color].html
+
+      Timeout.timeout(SLACK_MESSAGE_SEND_TIMEOUT) do
+        client = Slack::Notifier.new slack_webhook_url do
+          defaults channel: "##{chat_room[:channel]}",
+                   username: sender
+        end
+
+        extra_attachments = (options["attachments"].nil? ? [] : options["attachments"])
+        client.ping("", attachments: [{
+          fallback: message_text,
+          color: hex_color,
+          text: message_text
+        }] + extra_attachments)
+      end
+    rescue StandardError, Timeout::Error => e
+      unless e.message.include? "rate_limited"
+        raise SlackError, e.message
+      end
+    end
 end
 
 class SlackError < StandardError

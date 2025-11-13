@@ -1,0 +1,14 @@
+<%= @sender %>
+<%= "=" * @sender.length %>
+
+<%= @message_text %>
+
+<% if @attachments_text.present? %>
+
+Additional Information
+----------------------
+<%= @attachments_text %>
+<% end %>
+
+---
+This is an automated notification from Gumroad
