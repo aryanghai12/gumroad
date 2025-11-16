@@ -38,7 +38,10 @@ const DiscoverLinkSection = ({
         <div className="input">
           <div className="input">{discoverUrl}</div>
           <CopyToClipboard text={discoverUrl} tooltipPosition="bottom">
-            <Button className="pill">Copy link</Button>
+            <button className="inline-block align-middle border-solid border-[0.0625rem] overflow-hidden whitespace-nowrap text-ellipsis text-[rgb(var(--color))] py-3 px-4 rounded-full bg-[rgb(var(--contrast-filled))] border-[rgb(var(--parent-color)/var(--border-alpha))] cursor-pointer"
+              style={{ '--color': 'var(--contrast-filled)', '--parent-color': 'inherit' } as React.CSSProperties}>
+              Copy link
+            </button>
           </CopyToClipboard>
         </div>
         <small>
@@ -86,7 +89,8 @@ const LinkGenerationSection = ({
             onChange={(evt) => setInputLink(evt.target.value)}
           />
           <Button
-            className="pill"
+            className="inline-block align-middle border-solid border-[0.0625rem] overflow-hidden whitespace-nowrap text-ellipsis text-[rgb(var(--color))] py-3 px-4 rounded-full bg-[rgb(var(--contrast-filled))] border-[rgb(var(--parent-color)/var(--border-alpha))]"
+            style={{ '--color': 'var(--contrast-filled)', '--parent-color': 'inherit' } as React.CSSProperties}
             onClick={() => {
               try {
                 const url = new URL(inputLink);
@@ -117,7 +121,10 @@ const LinkGenerationSection = ({
         <div className="input">
           <div className="input">{generatedLink}</div>
           <CopyToClipboard text={generatedLink} tooltipPosition="bottom">
-            <Button className="pill">Copy link</Button>
+            <button className="inline-block align-middle border-solid border-[0.0625rem] overflow-hidden whitespace-nowrap text-ellipsis text-[rgb(var(--color))] py-3 px-4 rounded-full bg-[rgb(var(--contrast-filled))] border-[rgb(var(--parent-color)/var(--border-alpha))] cursor-pointer"
+              style={{ '--color': 'var(--contrast-filled)', '--parent-color': 'inherit' } as React.CSSProperties}>
+              Copy link
+            </button>
           </CopyToClipboard>
         </div>
         <small>Copy this affiliate link and share it with your audience</small>

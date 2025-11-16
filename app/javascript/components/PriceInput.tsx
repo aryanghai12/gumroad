@@ -9,6 +9,7 @@ import {
 } from "$app/utils/currency";
 
 import { TypeSafeOptionSelect } from "$app/components/TypeSafeOptionSelect";
+import Pill from "$app/components/Pill";
 
 export const PriceInput = React.forwardRef<
   HTMLInputElement,
@@ -61,7 +62,7 @@ export const PriceInput = React.forwardRef<
     return (
       <div className={cx("input", { disabled })}>
         {currencyCodeSelector ? (
-          <div className="pill pill-outline select">
+          <Pill size="default" variant="filled" className="pill-outline select">
             {getLongCurrencySymbol(currencyCode)}
             <TypeSafeOptionSelect
               name="Currency"
@@ -72,9 +73,11 @@ export const PriceInput = React.forwardRef<
                 label: getLongCurrencySymbol(currencyCode),
               }))}
             />
-          </div>
+          </Pill>
         ) : (
-          <div className="pill">{getLongCurrencySymbol(currencyCode)}</div>
+          <Pill size="default" variant="filled">
+            {getLongCurrencySymbol(currencyCode)}
+          </Pill>
         )}
         <input
           type="text"

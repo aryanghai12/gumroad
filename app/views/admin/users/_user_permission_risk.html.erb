@@ -13,7 +13,7 @@
   </div>
   <div>
     <%= with_tooltip(tip: "Risk State", position: "left") do %>
-      <div class="pill small <%= user.compliant? ? "success" : "warning" %>"><%= user.user_risk_state.humanize %></div>
+      <div class="inline-block align-middle border-solid border-[0.0625rem] overflow-hidden whitespace-nowrap text-ellipsis text-[rgb(var(--color))] p-2 rounded text-sm leading-[1.3] <%= user.compliant? ? 'bg-[rgb(var(--contrast-success))] border-[rgb(var(--parent-color)/var(--border-alpha))]' : 'bg-[rgb(var(--contrast-warning))] border-[rgb(var(--parent-color)/var(--border-alpha))]' %>" style="<%= user.compliant? ? '--color: var(--contrast-success); --parent-color: inherit' : '--color: var(--contrast-warning); --parent-color: inherit' %>"><%= user.user_risk_state.humanize %></div>
     <% end %>
   </div>
 </div>

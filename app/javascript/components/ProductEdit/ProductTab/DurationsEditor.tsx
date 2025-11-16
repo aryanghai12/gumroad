@@ -4,6 +4,7 @@ import { Button } from "$app/components/Button";
 import { Icon } from "$app/components/Icons";
 import { Modal } from "$app/components/Modal";
 import { NumberInput } from "$app/components/NumberInput";
+import Pill from "$app/components/Pill";
 import { PriceInput } from "$app/components/PriceInput";
 import { Duration, useProductEditContext } from "$app/components/ProductEdit/state";
 import { Drawer, ReorderingHandle, SortableList } from "$app/components/SortableList";
@@ -159,7 +160,7 @@ const DurationEditor = ({
               >
                 {(props) => <input id={`${uid}-duration`} {...props} />}
               </NumberInput>
-              <div className="pill">minutes</div>
+              <Pill size="default" variant="filled">minutes</Pill>
             </div>
           </fieldset>
           <fieldset>

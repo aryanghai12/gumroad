@@ -15,7 +15,7 @@ $light-body-bg: #ffffff;
 @include buttons;
 @import "../stylesheets/containers";
 @import "../stylesheets/forms";
-@import "../stylesheets/pill";
+// @import "../stylesheets/pill"; // Migrated to Tailwind - see app/javascript/components/Pill.tsx
 @import "../stylesheets/product";
 @import "../stylesheets/rows";
 @import "../stylesheets/rich_text";

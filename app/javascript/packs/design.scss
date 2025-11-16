@@ -18,7 +18,7 @@
 @import "../stylesheets/nav";
 @import "../stylesheets/nested_menu";
 @import "../stylesheets/pagination";
-@import "../stylesheets/pill";
+// @import "../stylesheets/pill"; // Migrated to Tailwind - see app/javascript/components/Pill.tsx
 @import "../stylesheets/product";
 @import "../stylesheets/profile";
 @import "../stylesheets/rows";
