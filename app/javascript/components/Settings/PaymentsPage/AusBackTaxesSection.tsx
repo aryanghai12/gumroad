@@ -28,7 +28,7 @@ const AusBackTaxesSection = ({
     </header>
     <div>
       {opted_in_to_au_backtax ? (
-        <div className="paragraphs">
+        <div className="flex flex-col gap-4">
           <Alert variant="success">You've opted in to backtaxes collection.</Alert>
           <p>
             From 2018 to 2022, you made {total_amount_to_au} in sales to customers located in Australia. Taxes on these
@@ -51,7 +51,7 @@ const AusBackTaxesSection = ({
           )}
         </div>
       ) : (
-        <div className="paragraphs">
+        <div className="flex flex-col gap-4">
           <Alert variant="warning">
             The Australian government is claiming taxes for your sales between 2018 to 2022.
           </Alert>

@@ -30,7 +30,7 @@ export const BundleContentUpdatedStatus = () => {
 
   return (
     <Alert variant="info" role="status">
-      <div className="paragraphs">
+      <div className="flex flex-col gap-4">
         <strong>Some of your customers don't have access to the latest content in your bundle.</strong>
         Would you like to give them access and send them an email notification?
         <Button color="primary" onClick={() => void handleSubmit()} disabled={isLoading}>
