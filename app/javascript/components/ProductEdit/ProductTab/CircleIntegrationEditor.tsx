@@ -10,6 +10,7 @@ import { showAlert } from "$app/components/server-components/Alert";
 import { ToggleSettingRow } from "$app/components/SettingRow";
 import { Toggle } from "$app/components/Toggle";
 import { useRunOnce } from "$app/components/useRunOnce";
+import { Alert } from "$app/components/Alert";
 
 export type CircleIntegration = {
   name: "circle";
@@ -139,9 +140,9 @@ export const CircleIntegrationEditor = ({
                 <LoadingSpinner />
               </div>
             ) : communities.status === "error" ? (
-              <div role="alert" className="danger">
+              <Alert variant="danger">
                 Could not retrieve communities from Circle. Please check your API key.
-              </div>
+              </Alert>
             ) : (
               <fieldset>
                 <legend>
@@ -170,9 +171,9 @@ export const CircleIntegrationEditor = ({
                 <LoadingSpinner />
               </div>
             ) : spaceGroups.status === "error" ? (
-              <div role="alert" className="danger">
+              <Alert variant="danger">
                 Could not retrieve space groups from Circle. Please try again.
-              </div>
+              </Alert>
             ) : (
               <>
                 <fieldset>
@@ -212,11 +213,11 @@ export const CircleIntegrationEditor = ({
                 {product.variants.length > 0 ? (
                   <>
                     {product.variants.every(({ integrations }) => !integrations.circle) ? (
-                      <div role="status" className="warning">
+                      <Alert variant="warning" role="status">
                         {product.native_type === "membership"
                           ? "Your integration is not assigned to any tier. Check your tiers' settings."
                           : "Your integration is not assigned to any version. Check your versions' settings."}
-                      </div>
+                      </Alert>
                     ) : null}
                     <Toggle
                       value={product.variants.every(({ integrations }) => integrations.circle)}

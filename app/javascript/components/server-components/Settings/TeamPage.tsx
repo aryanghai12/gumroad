@@ -30,6 +30,7 @@ import { Option, Select } from "$app/components/Select";
 import { showAlert } from "$app/components/server-components/Alert";
 import { Layout as SettingsLayout } from "$app/components/Settings/Layout";
 import { WithTooltip } from "$app/components/WithTooltip";
+import { Alert } from "$app/components/Alert";
 
 const ROLE_TITLES: Record<Role, string> = {
   owner: "Owner",
@@ -266,7 +267,7 @@ const TeamMembersSection = ({
         <h2 ref={ref}>Team members</h2>
       </header>
       {deletedMember ? (
-        <div role="alert" className="success">
+        <Alert variant="success">
           <div>
             {deletedMember.name !== "" ? deletedMember.name : deletedMember.email} was removed from team members
           </div>
@@ -290,7 +291,7 @@ const TeamMembersSection = ({
           >
             Undo
           </button>
-        </div>
+        </Alert>
       ) : null}
       <table>
         <thead>

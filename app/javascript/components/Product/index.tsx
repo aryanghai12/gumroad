@@ -63,6 +63,7 @@ import { useOnChange } from "$app/components/useOnChange";
 import { useOriginalLocation } from "$app/components/useOriginalLocation";
 import { useUserAgentInfo } from "$app/components/UserAgent";
 import { useRunOnce } from "$app/components/useRunOnce";
+import { Alert } from "$app/components/Alert";
 
 export type Seller = { id: string; name: string; avatar_url: string; profile_url: string };
 
@@ -431,19 +432,19 @@ export const Product = ({
       <section>
         <section>
           {notForSaleMessage ? (
-            <div role="status" className="warning">
+            <Alert variant="warning" role="status">
               {notForSaleMessage}
-            </div>
+            </Alert>
           ) : product.native_type === "commission" ? (
-            <div role="status" className="info">
+            <Alert variant="info" role="status">
               Secure your order with a {`${COMMISSION_DEPOSIT_PROPORTION * 100}%`} deposit today; the remaining balance
               will be charged upon completion.
-            </div>
+            </Alert>
           ) : null}
           {discountCode ? (
             discountCode.valid ? (
               (discountedPriceCents < priceCents || discountCode.discount.minimum_quantity) && !pppDiscounted ? (
-                <div role="status" className="success">
+                <Alert variant="success" role="status">
                   <div className="paragraphs">
                     {discountCode.discount.minimum_quantity
                       ? `Get ${
@@ -487,16 +488,16 @@ export const Product = ({
                       />
                     ) : null}
                   </div>
-                </div>
+                </Alert>
               ) : null
             ) : (
-              <div role="status" className="danger">
+              <Alert variant="danger" role="status">
                 {discountCode.error_code === "sold_out"
                   ? "Sorry, the discount code you wish to use has expired."
                   : discountCode.error_code === "invalid_offer"
                     ? "Sorry, the discount code you wish to use is invalid."
                     : "Sorry, the discount code you wish to use is inactive."}
-              </div>
+              </Alert>
             )
           ) : null}
           <ConfigurationSelector
@@ -507,7 +508,7 @@ export const Product = ({
             ref={configurationSelectorRef}
           />
           {product.ppp_details && pppDiscounted ? (
-            <div role="status" className="info">
+            <Alert variant="info" role="status">
               <div>
                 This product supports purchasing power parity. Because you're located in{" "}
                 <b>{product.ppp_details.country}</b>, the price has been discounted by{" "}
@@ -527,19 +528,19 @@ export const Product = ({
                   ? " This discount will be applied because it is greater than the offer code discount."
                   : null}
               </div>
-            </div>
+            </Alert>
           ) : null}
           {product.free_trial ? (
-            <div role="status" className="info">
+            <Alert variant="info" role="status">
               All memberships include a {product.free_trial.duration.amount} {product.free_trial.duration.unit} free
               trial
-            </div>
+            </Alert>
           ) : null}
           {product.duration_in_months ? (
-            <div role="status" className="info">
+            <Alert variant="info" role="status">
               This membership will automatically end after{" "}
               {product.duration_in_months === 1 ? "one month" : `${product.duration_in_months} months`}
-            </div>
+            </Alert>
           ) : null}
           <CtaButton
             ref={ctaButtonRef}
@@ -554,7 +555,7 @@ export const Product = ({
             }}
           />
           {product.sales_count !== null ? (
-            <div role="status" className="info">
+            <Alert variant="info" role="status">
               <span>
                 <strong>{product.sales_count.toLocaleString()}</strong>{" "}
                 {product.recurrences
@@ -566,17 +567,17 @@ export const Product = ({
                       : "download"}
                 {product.sales_count === 1 ? "" : "s"}
               </span>
-            </div>
+            </Alert>
           ) : null}
           {product.preorder ? (
-            <div role="status" className="info">
+            <Alert variant="info" role="status">
               Available on {formatDate(parseISO(product.preorder.release_date))}
-            </div>
+            </Alert>
           ) : null}
           {product.streamable ? (
-            <div role="status" className="info">
+            <Alert variant="info" role="status">
               Watch link provided after purchase
-            </div>
+            </Alert>
           ) : null}
           {product.summary || product.attributes.length > 0 ? (
             <div className="stack">

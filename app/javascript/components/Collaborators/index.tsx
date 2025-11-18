@@ -36,6 +36,7 @@ import Placeholder from "$app/components/ui/Placeholder";
 import { WithTooltip } from "$app/components/WithTooltip";
 
 import placeholder from "$assets/images/placeholders/collaborators.png";
+import { Alert } from "$app/components/Alert";
 
 const formatProductNames = (collaborator: Collaborator) => {
   if (collaborator.products.length === 0) {
@@ -91,9 +92,9 @@ const CollaboratorDetails = ({
       </header>
 
       {selectedCollaborator.setup_incomplete ? (
-        <div role="alert" className="warning">
+        <Alert variant="warning">
           Collaborators won't receive their cut until they set up a payout account in their Gumroad settings.
-        </div>
+        </Alert>
       ) : null}
 
       <section className="stack">

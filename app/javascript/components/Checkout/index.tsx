@@ -12,6 +12,7 @@ import { asyncVoid } from "$app/utils/promise";
 import { formatAmountPerRecurrence, recurrenceNames, recurrenceDurationLabels } from "$app/utils/recurringPricing";
 import { assertResponseError } from "$app/utils/request";
 
+import { Alert } from "$app/components/Alert";
 import { Button, NavigationButton } from "$app/components/Button";
 import { PaymentForm } from "$app/components/Checkout/PaymentForm";
 import { Popover } from "$app/components/Popover";
@@ -525,11 +526,7 @@ const CartItemComponent = ({
                         }
                         showInstallmentPlan
                       />
-                      {error ? (
-                        <div role="alert" className="danger">
-                          {error}
-                        </div>
-                      ) : null}
+                      {error ? <Alert variant="danger">{error}</Alert> : null}
                       <Button color="accent" onClick={saveChanges}>
                         Save changes
                       </Button>

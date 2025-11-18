@@ -1,0 +1,41 @@
+[role="alert"],
+[role="status"] {
+
+    &.success,
+    &.danger,
+    &.warning,
+    &.info {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: start;
+        gap: var(--spacer-2);
+        padding: var(--spacer-3);
+        border-width: var(--border-width);
+        border-style: solid;
+        border-radius: var(--border-radius-1);
+    }
+
+    &.success {
+        border-color: rgb(var(--success));
+        background-color: rgb(var(--success) / 0.2);
+        color: rgb(var(--success));
+    }
+
+    &.danger {
+        border-color: rgb(var(--danger));
+        background-color: rgb(var(--danger) / 0.2);
+        color: rgb(var(--danger));
+    }
+
+    &.warning {
+        border-color: rgb(var(--warning));
+        background-color: rgb(var(--warning) / 0.2);
+        color: rgb(var(--warning));
+    }
+
+    &.info {
+        border-color: rgb(var(--info));
+        background-color: rgb(var(--info) / 0.2);
+        color: rgb(var(--info));
+    }
+}

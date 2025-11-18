@@ -26,6 +26,7 @@ import { useRunOnce } from "$app/components/useRunOnce";
 import { useClientSortingTableDriver } from "$app/components/useSortingTableDriver";
 
 import placeholderImage from "$assets/images/placeholders/dashboard.png";
+import { Alert } from "$app/components/Alert";
 
 type ProductRow = {
   id: string;
@@ -320,19 +321,19 @@ export const DashboardPage = ({
         className="border-b-0 sm:border-b"
       />
       {stripe_verification_message ? (
-        <div role="alert" className="warning">
+        <Alert variant="warning">
           <div>
             {stripe_verification_message} <a href={Routes.settings_payments_path()}>Update</a>
           </div>
-        </div>
+        </Alert>
       ) : null}
       {show_1099_download_notice ? (
-        <div role="alert" className="info">
+        <Alert variant="info">
           <div>
             Your 1099 tax form for {new Date().getFullYear() - 1} is ready!{" "}
             <a href={Routes.dashboard_download_tax_form_path()}>Click here to download</a>.
           </div>
-        </div>
+        </Alert>
       ) : null}
 
       {loggedInUser?.policies.settings_payments_user.show

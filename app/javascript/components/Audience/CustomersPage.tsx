@@ -85,6 +85,7 @@ import { useSortingTableDriver } from "$app/components/useSortingTableDriver";
 import { WithTooltip } from "$app/components/WithTooltip";
 
 import placeholder from "$assets/images/placeholders/customers.png";
+import { Alert } from "$app/components/Alert";
 
 type Product = { id: string; name: string; variants: { id: string; name: string }[] };
 
@@ -792,42 +793,42 @@ const CustomerDrawer = ({
       </header>
       {commission ? <CommissionStatusPill commission={commission} /> : null}
       {customer.is_additional_contribution ? (
-        <div role="status" className="info">
+        <Alert variant="info" role="status">
           <div>
             <strong>Additional amount: </strong>
             This is an additional contribution, added to a previous purchase of this product.
           </div>
-        </div>
+        </Alert>
       ) : null}
       {customer.ppp ? (
-        <div role="status" className="info">
+        <Alert variant="info" role="status">
           <div>
             This customer received a purchasing power parity discount of <b>{customer.ppp.discount}</b> because they are
             located in <b>{customer.ppp.country}</b>.
           </div>
-        </div>
+        </Alert>
       ) : null}
       {customer.giftee_email ? (
-        <div role="status" className="info">
+        <Alert variant="info" role="status">
           {customer.email} purchased this for {customer.giftee_email}.
-        </div>
+        </Alert>
       ) : null}
       {customer.is_preorder ? (
-        <div role="status" className="info">
+        <Alert variant="info" role="status">
           <div>
             <strong>Pre-order: </strong>
             This is a pre-order authorization. The customer's card has not been charged yet.
           </div>
-        </div>
+        </Alert>
       ) : null}
       {customer.affiliate && customer.affiliate.type !== "Collaborator" ? (
-        <div role="status" className="info">
+        <Alert variant="info" role="status">
           <div>
             <strong>Affiliate: </strong>
             An affiliate ({customer.affiliate.email}) helped you make this sale and received {customer.affiliate.amount}
             .
           </div>
-        </div>
+        </Alert>
       ) : null}
       <EmailSection
         label="Email"
@@ -1508,9 +1509,9 @@ const TrackingSection = ({
           </div>
         ) : (
           <div>
-            <div role="status" className="success">
+            <Alert variant="success" role="status">
               Shipped
-            </div>
+            </Alert>
           </div>
         )
       ) : (
@@ -2213,14 +2214,14 @@ const RefundForm = ({
           )}
         </div>
         {showRefundFeeNotice ? (
-          <div role="status" className="info">
+          <Alert variant="info" role="status">
             <p>
               Going forward, Gumroad does not return any fees when a payment is refunded.{" "}
               <a href="/help/article/47-how-to-refund-a-customer" target="_blank" rel="noreferrer">
                 Learn more
               </a>
             </p>
-          </div>
+          </Alert>
         ) : null}
       </fieldset>
       <div style={{ display: "contents" }}>
@@ -2364,9 +2365,9 @@ const ChargesSection = ({
         <>
           {remainingCharges !== null ? (
             <section>
-              <div role="status" className="info">
+              <Alert variant="info" role="status">
                 {`${remainingCharges} ${remainingCharges > 1 ? "charges" : "charge"} remaining`}
-              </div>
+              </Alert>
             </section>
           ) : null}
           {charges.map((charge) => (

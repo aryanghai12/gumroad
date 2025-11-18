@@ -13,6 +13,7 @@ import { PasswordInput } from "$app/components/PasswordInput";
 import { Separator } from "$app/components/Separator";
 import { useOriginalLocation } from "$app/components/useOriginalLocation";
 import { RecaptchaCancelledError, useRecaptcha } from "$app/components/useRecaptcha";
+import { Alert } from "$app/components/Alert";
 
 type SaveState = { type: "initial" | "submitting" } | { type: "error"; message: string };
 
@@ -68,9 +69,9 @@ export const LoginPage = ({
           </Separator>
           <section>
             {saveState.type === "error" ? (
-              <div role="alert" className="danger">
+              <Alert variant="danger">
                 {saveState.message}
-              </div>
+              </Alert>
             ) : null}
             <fieldset>
               <legend>

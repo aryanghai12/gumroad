@@ -16,6 +16,7 @@ import { useProductEditContext } from "$app/components/ProductEdit/state";
 import { Toggle } from "$app/components/Toggle";
 import { TwitterShareButton } from "$app/components/TwitterShareButton";
 import { useRunOnce } from "$app/components/useRunOnce";
+import { Alert } from "$app/components/Alert";
 
 export const ShareTab = () => {
   const currentSeller = useCurrentSeller();
@@ -71,12 +72,12 @@ export const ShareTab = () => {
               </a>
             </header>
             {isListedOnDiscover ? (
-              <div role="status" className="success">
+              <Alert variant="success" role="status">
                 <div>{product.name} is listed on Gumroad Discover.</div>
                 <a className="close" href={discoverLink.toString()}>
                   View
                 </a>
-              </div>
+              </Alert>
             ) : null}
             <div className="paragraphs">
               <p>

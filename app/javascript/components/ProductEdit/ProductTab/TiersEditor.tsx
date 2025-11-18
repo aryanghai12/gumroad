@@ -31,6 +31,7 @@ import Placeholder from "$app/components/ui/Placeholder";
 import { useDebouncedCallback } from "$app/components/useDebouncedCallback";
 import { useRunOnce } from "$app/components/useRunOnce";
 import { WithTooltip } from "$app/components/WithTooltip";
+import { Alert } from "$app/components/Alert";
 
 let newTierId = 0;
 
@@ -427,9 +428,9 @@ You can modify or cancel your membership at any time.`;
       <div className="dropdown">
         <div className="grid gap-6">
           {initialEffectiveDate ? (
-            <div role="alert" className="warning">
+            <Alert variant="warning">
               You have scheduled a pricing update for existing customers on {format(initialEffectiveDate, "MMMM d, y")}
-            </div>
+            </Alert>
           ) : null}
           <div>
             <strong>

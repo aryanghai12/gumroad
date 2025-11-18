@@ -23,6 +23,7 @@ import Placeholder from "$app/components/ui/Placeholder";
 import { WithTooltip } from "$app/components/WithTooltip";
 
 import placeholderImage from "$assets/images/placeholders/affiliate-signup-form.png";
+import { Alert } from "$app/components/Alert";
 
 type InvalidProductAttrs = Set<"commission" | "destination_url">;
 
@@ -151,9 +152,9 @@ export const AffiliateSignupForm = () => {
                 ) : null}
               </div>
               {enableAffiliateLink ? null : (
-                <div role="alert" className="warning">
+                <Alert variant="warning">
                   You must enable and set up the commission for at least one product before sharing your affiliate link.
-                </div>
+                </Alert>
               )}
             </fieldset>
           </section>

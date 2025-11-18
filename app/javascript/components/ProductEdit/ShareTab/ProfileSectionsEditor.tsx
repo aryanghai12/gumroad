@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { useCurrentSeller } from "$app/components/CurrentSeller";
 import { ProfileSection } from "$app/components/ProductEdit/state";
+import { Alert } from "$app/components/Alert";
 
 export const ProfileSectionsEditor = ({
   sectionIds,
@@ -61,12 +62,12 @@ export const ProfileSectionsEditor = ({
           })}
         </fieldset>
       ) : (
-        <div role="status" className="info">
+        <Alert variant="info" role="status">
           <div>
             You currently have no sections in your profile to display this,{" "}
             <a href={Routes.root_url({ host: currentSeller.subdomain })}>create one here</a>
           </div>
-        </div>
+        </Alert>
       )}
     </section>
   );

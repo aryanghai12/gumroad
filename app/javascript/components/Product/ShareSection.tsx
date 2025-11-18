@@ -3,6 +3,7 @@ import * as React from "react";
 import { Wishlist, addToWishlist, createWishlist } from "$app/data/wishlists";
 import { assertResponseError } from "$app/utils/request";
 
+import { Alert } from "$app/components/Alert";
 import { Button } from "$app/components/Button";
 import { ComboBox } from "$app/components/ComboBox";
 import { CopyToClipboard } from "$app/components/CopyToClipboard";
@@ -161,7 +162,7 @@ export const ShareSection = ({
         </Popover>
       </div>
       {saveState.type === "success" ? (
-        <div role="alert" className="success">
+        <Alert variant="success">
           {saveState.newlyCreated ? (
             <span>
               Wishlist created! <a href={Routes.wishlists_url()}>Edit it here.</a>
@@ -169,7 +170,7 @@ export const ShareSection = ({
           ) : (
             "Added to wishlist!"
           )}
-        </div>
+        </Alert>
       ) : null}
     </>
   );
