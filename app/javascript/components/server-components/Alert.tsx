@@ -1,4 +1,3 @@
-import cx from "classnames";
 import * as React from "react";
 import { is } from "ts-safe-cast";
 
@@ -39,22 +38,41 @@ const Alert = ({ initial }: { initial: AlertPayload | null }) => {
     if (initial) startTimer();
   });
 
+  const getColorStyles = (status: string | undefined) => {
+    if (!status) return {};
+
+    const colorVarMap: Record<string, string> = {
+      success: "--success",
+      danger: "--danger",
+      warning: "--warning",
+      info: "--info",
+    };
+
+    const colorVar = colorVarMap[status] || "--info";
+    return {
+      borderWidth: "var(--border-width)",
+      borderStyle: "solid" as const,
+      borderColor: `rgb(var(${colorVar}))`,
+      borderRadius: "var(--border-radius-1)",
+      backgroundColor: `rgb(var(${colorVar}) / 0.2)`,
+      color: `rgb(var(${colorVar}))`,
+    };
+  };
+
+  if (!isVisible || !alert) return null;
+
   return (
     <div
       role="alert"
-      className={cx(
-        "bg-filled fixed top-4 left-1/2 w-max max-w-[calc(100vw-2rem)] px-4 py-2 md:max-w-sm",
-        alert?.status,
-        isVisible ? "visible" : "invisible",
-      )}
+      className="fixed top-4 left-1/2 w-max max-w-[calc(100vw-2rem)] px-4 py-2 md:max-w-sm animate-fade-in-down-out-up"
       style={{
-        transform: `translateX(-50%) translateY(${isVisible ? 0 : "calc(-100% - var(--spacer-4))"})`,
-        transition: "all 0.3s ease-out 0.5s",
+        ...getColorStyles(alert.status),
+        transform: "translateX(-50%)",
         zIndex: "var(--z-index-tooltip)",
       }}
-      dangerouslySetInnerHTML={alert?.html ? { __html: alert.message } : undefined}
+      dangerouslySetInnerHTML={alert.html ? { __html: alert.message } : undefined}
     >
-      {!alert?.html ? alert?.message : null}
+      {!alert.html ? alert.message : null}
     </div>
   );
 };

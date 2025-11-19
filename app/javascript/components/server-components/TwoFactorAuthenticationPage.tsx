@@ -9,6 +9,7 @@ import { Layout } from "$app/components/Authentication/Layout";
 import { Button } from "$app/components/Button";
 import { showAlert } from "$app/components/server-components/Alert";
 import { useOriginalLocation } from "$app/components/useOriginalLocation";
+import { Alert } from "$app/components/Alert";
 
 type SaveState = { type: "initial" | "submitting" } | { type: "error"; message: string };
 
@@ -65,9 +66,9 @@ export const TwoFactorAuthenticationPage = ({
       <form onSubmit={(e) => void handleSubmit(e)}>
         <section>
           {loginState.type === "error" ? (
-            <div role="alert" className="danger">
+            <Alert variant="danger">
               {loginState.message}
-            </div>
+            </Alert>
           ) : null}
           <fieldset>
             <legend>

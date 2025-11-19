@@ -30,6 +30,7 @@ import { useOriginalLocation } from "$app/components/useOriginalLocation";
 import { useRunOnce } from "$app/components/useRunOnce";
 
 import placeholder from "$assets/images/placeholders/library.png";
+import { Alert } from "$app/components/Alert";
 
 export type Result = {
   product: {
@@ -373,7 +374,7 @@ const LibraryPage = ({ results, creators, bundles, reviews_page_enabled, followi
           </Placeholder>
         ) : null}
         {archivedCount > 0 && !state.search.showArchivedOnly && !showArchivedNotice ? (
-          <div role="status" className="info mb-5">
+          <Alert variant="info" role="status" className="mb-5">
             <span>
               You have {archivedCount} archived purchase{archivedCount === 1 ? "" : "s"}.{" "}
               <button
@@ -384,7 +385,7 @@ const LibraryPage = ({ results, creators, bundles, reviews_page_enabled, followi
                 Click here to view
               </button>
             </span>
-          </div>
+          </Alert>
         ) : null}
         <div
           className={classNames(

@@ -36,6 +36,7 @@ import { Sheet, SheetHeader } from "$app/components/ui/Sheet";
 import { WithTooltip } from "$app/components/WithTooltip";
 
 import placeholder from "$assets/images/placeholders/collaborators.png";
+import { Alert } from "$app/components/Alert";
 
 const formatProductNames = (collaborator: Collaborator) => {
   if (collaborator.products.length === 0) {
@@ -87,9 +88,9 @@ const CollaboratorDetails = ({
     <Sheet open onOpenChange={onClose}>
       <SheetHeader>{selectedCollaborator.name}</SheetHeader>
       {selectedCollaborator.setup_incomplete ? (
-        <div role="alert" className="warning">
+        <Alert variant="warning">
           Collaborators won't receive their cut until they set up a payout account in their Gumroad settings.
-        </div>
+        </Alert>
       ) : null}
 
       <section className="stack">

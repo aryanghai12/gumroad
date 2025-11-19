@@ -22,6 +22,7 @@ import { Icon } from "$app/components/Icons";
 import { LoadingSpinner } from "$app/components/LoadingSpinner";
 import { showAlert } from "$app/components/server-components/Alert";
 import { useUserAgentInfo } from "$app/components/UserAgent";
+import { Alert } from "$app/components/Alert";
 
 const ALLOWED_EXTENSIONS = ["jpeg", "jpg", "png", "pdf"];
 
@@ -192,11 +193,11 @@ const DisputeEvidencePage = ({ dispute_evidence, disputable, products }: Props) 
                 {dispute_evidence.duration_left_to_submit_evidence_formatted} will help us win on your behalf.
               </strong>
             </p>
-            <div role="alert" className="warning">
+            <Alert variant="warning">
               You only have one opportunity to submit your response. We immediately forward your response and all
               supporting files to our payment processor. You can't edit the response or submit additional information,
               so make sure you've assembled all of your evidence before you submit.
-            </div>
+            </Alert>
           </div>
           <div>
             <fieldset>

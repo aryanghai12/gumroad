@@ -5,6 +5,7 @@ import { cast } from "ts-safe-cast";
 
 import DateTimeWithRelativeTooltip from "$app/components/Admin/DateTimeWithRelativeTooltip";
 import { BooleanIcon, NoIcon } from "$app/components/Admin/Icons";
+import { Alert } from "$app/components/Alert";
 
 export type AdminMerchantAccountProps = {
   id: number;
@@ -115,9 +116,9 @@ const AdminMerchantAccountsShow = () => {
             ))}
           </dl>
         ) : (
-          <div role="alert" className="info">
+          <Alert variant="info">
             Charge Processor Merchant information is missing.
-          </div>
+          </Alert>
         )}
       </div>
 

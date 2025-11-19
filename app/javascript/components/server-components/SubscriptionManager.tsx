@@ -39,6 +39,7 @@ import { showAlert } from "$app/components/server-components/Alert";
 import { useOriginalLocation } from "$app/components/useOriginalLocation";
 
 import { useOnChangeSync } from "../useOnChange";
+import { Alert } from "$app/components/Alert";
 
 type Props = {
   product: {
@@ -335,12 +336,12 @@ const SubscriptionManager = ({
 
       {!hasSavedCard && subscription.is_gift ? (
         <div>
-          <div role="alert" className="warning">
+          <Alert variant="warning">
             <div>
               Your {subscriptionEntity} is paid up until {formattedSubscriptionEndDate}. Add your own payment method
               below to ensure that your {subscriptionEntity} renews.
             </div>
-          </div>
+          </Alert>
         </div>
       ) : null}
 

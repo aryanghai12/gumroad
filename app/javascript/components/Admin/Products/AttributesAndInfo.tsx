@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { useUserAgentInfo } from "$app/components/UserAgent";
+import { Alert } from "$app/components/Alert";
 
 type FileInfoAttribute = {
   name: string;
@@ -57,33 +58,33 @@ const ProductAttributesAndInfo = ({ productData }: Props) => {
   const hasNoAttributes = custom_summary == null && file_info_attributes.length === 0 && custom_attributes.length === 0;
 
   return hasNoAttributes && preorder == null && !should_show_sales_count && !has_stream_only_files ? (
-    <div role="status" className="info">
+    <Alert variant="info" role="status">
       No additional details.
-    </div>
+    </Alert>
   ) : (
     <div className="product-info grid gap-4">
       {should_show_sales_count ? (
-        <div role="alert" className="info">
+        <Alert variant="info">
           <div>
             <strong>{sales_count.toLocaleString(userAgentInfo.locale)}</strong> {salesUnit}
             {sales_count === 1 ? "" : "s"}
           </div>
-        </div>
+        </Alert>
       ) : null}
       {preorder != null ? (
         <>
-          <div role="alert" className="info">
+          <Alert variant="info">
             Available on {preorder.release_date_fmt}
-          </div>
+          </Alert>
           <h5 className="product-info-preorder-indicator legacy-only">Available on {preorder.release_date_fmt}</h5>
         </>
       ) : null}
 
       {has_stream_only_files ? (
         <>
-          <div role="alert" className="info">
+          <Alert variant="info">
             Watch link provided after purchase
-          </div>
+          </Alert>
           <div className="product-info-stream-only-indicator legacy-only">
             <h5>Available to stream instantly</h5>
             <small>Watch link provided after purchase</small>

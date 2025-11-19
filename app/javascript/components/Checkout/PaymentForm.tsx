@@ -63,6 +63,7 @@ import { useRefToLatest } from "$app/components/useRefToLatest";
 import { useRunOnce } from "$app/components/useRunOnce";
 
 import { Product } from "./cartState";
+import { Alert } from "$app/components/Alert";
 
 const CountryInput = () => {
   const [state, dispatch] = useState();
@@ -591,9 +592,9 @@ const CustomerDetails = () => {
       ) : null}
       {state.warning ? (
         <div>
-          <div role="status" className="warning">
+          <Alert variant="warning" role="status">
             {state.warning}
-          </div>
+          </Alert>
         </div>
       ) : null}
       {isTippingEnabled(state) ? <TipSelector /> : null}
@@ -1205,10 +1206,10 @@ export const PaymentForm = ({
     <div ref={paymentFormRef} className={cx("stack", className)} aria-label="Payment form">
       {isTestPurchase ? (
         <div>
-          <div role="alert" className="info">
+          <Alert variant="info">
             This will be a test purchase as you are the creator of at least one of the products. Your payment method
             will not be charged.
-          </div>
+          </Alert>
         </div>
       ) : null}
       <EmailAddress />
@@ -1228,9 +1229,9 @@ export const PaymentForm = ({
           </div>
           {notice ? (
             <div>
-              <div role="alert" className="info">
+              <Alert variant="info">
                 {notice}
-              </div>
+              </Alert>
             </div>
           ) : null}
           <CreditCard />

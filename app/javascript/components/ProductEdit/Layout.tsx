@@ -25,6 +25,7 @@ import { useRefToLatest } from "$app/components/useRefToLatest";
 import { WithTooltip } from "$app/components/WithTooltip";
 
 import { FileEntry, useProductEditContext } from "./state";
+import { Alert } from "$app/components/Alert";
 
 export const useProductUrl = (params = {}) => {
   const { product, uniquePermalink } = useProductEditContext();
@@ -90,7 +91,7 @@ const NotifyAboutProductUpdatesAlert = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div role="alert" className="info">
+      <Alert variant="info">
         <div className="flex flex-col gap-4">
           Changes saved! Would you like to notify your customers about those changes?
           <div className="flex gap-2">
@@ -115,7 +116,7 @@ const NotifyAboutProductUpdatesAlert = () => {
             </NavigationButton>
           </div>
         </div>
-      </div>
+      </Alert>
     </div>
   );
 };

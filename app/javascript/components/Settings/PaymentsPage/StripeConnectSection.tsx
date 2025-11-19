@@ -4,6 +4,7 @@ import { cast } from "ts-safe-cast";
 import { asyncVoid } from "$app/utils/promise";
 import { request, assertResponseError } from "$app/utils/request";
 
+import { Alert } from "$app/components/Alert";
 import { Button } from "$app/components/Button";
 import { Icon } from "$app/components/Icons";
 import { showAlert } from "$app/components/server-components/Alert";
@@ -84,10 +85,10 @@ const StripeConnectSection = ({
               </Button>
             </p>
             {!stripeConnect.stripe_disconnect_allowed ? (
-              <div role="alert" className="warning">
+              <Alert variant="warning">
                 You cannot disconnect your Stripe account because it is being used for active subscription or preorder
                 payments.
-              </div>
+              </Alert>
             ) : null}
           </div>
         ) : (
