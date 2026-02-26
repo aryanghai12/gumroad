@@ -386,6 +386,7 @@ describe "Checkout with Payment Request API", :js, type: :system do
       # When no payment request methods are available, card is shown without radio (single option)
       expect(page).not_to have_field("Card", type: "radio")
       expect(page).to have_selector("[aria-label='Card information']", wait: 10)
+    }
     end
   end
 end
